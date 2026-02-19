@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex_u.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/12 13:14:14 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/12 13:16:57 by ldeplace         ###   ########.fr       */
+/*   Created: 2026/02/19 15:24:37 by ldeplace          #+#    #+#             */
+/*   Updated: 2026/02/19 15:48:30 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/pipex.h"
 
-int	main(int argc, char **argv)
+void	free_tab(char **tab)
 {
-	if (argc != 5)
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
 	{
-		ft_printf("Error\nPipex need 4 args");
-		return (0);
+		free(tab[i]);
+		i++;
 	}
-	ft_check_file(argv);
-	return (0);
+	free(tab);
+}
+
+void	error_exit(char *msg, int status)
+{
+	perror(msg);
+	exit(status);
 }
