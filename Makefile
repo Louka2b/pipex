@@ -1,35 +1,32 @@
-NAME = pipex
+NAME        = pipex
+LIBFT       = libft/libft.a
+LIBFT_DIR   = libft
+MAIN        = src/main.c
+SRCS        = utils/pipex_u.c src/ft_check_file.c
+OBJS        = $(SRCS:.c=.o)
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -g
+RM          = rm -f
 
-LIBFT = libft
+all: $(NAME)
 
-MAIN = main.c
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-SRCS_PS =	
+$(NAME): $(LIBFT) $(OBJS) $(MAIN)
+	$(CC) $(CFLAGS) $(MAIN) $(OBJS) $(LIBFT) -o $(NAME)
 
-OBJ_PS = $(SRCS_PS:%.c=%.o)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-CFLAGS = -Wall -Wextra -Werror -g
-
-all : $(NAME) 
-
-$(NAME): makelib
-	cc $(CFLAGS) $(MAIN) $(NAME).a -o $(NAME)
-
-makelib: $(OBJ_PS) 
-	$(MAKE) -C $(LIBFT) all
-	cp libft/libft.a $(NAME).a
-	ar rcs $(NAME).a $(OBJ_PS)
-
-clean:  
-	rm -f $(OBJ_PS)
-	$(MAKE) -C $(LIBFT) clean
+clean:
+	$(RM) $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(NAME).a
-	$(MAKE) -C $(LIBFT) fclean
+	$(RM) $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
-re: fclean clean all 
-	$(MAKE) -C $(LIBFT) re
+re: fclean all
 
-.PHONY: all clean fclean re makelib
+.PHONY: all clean fclean re
