@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:05:31 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/19 15:49:55 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:19:29 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_pipex
 	char	*cmd1_path;
 	char	**cmd2_args;
 	char	*cmd2_path;
+	int		infile;
+	int		outfile;
 }			t_pipex;
 
 void		error_exit(char *msg, int status);

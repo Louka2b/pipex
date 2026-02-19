@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:17:10 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/19 16:01:49 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:22:22 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,17 @@ char	*find_cmd_path(char *cmd, char **envp)
 	return (search_in_path(cmd, envp));
 }
 
+static void	ft_acces_folder(char **argv, t_pipex *pipex)
+{
+	if (access(argv[1], R_OK) == -1)
+	{
+		pipex->infile = -1;
+		ft_printf("TMP MSG Error\nfile1 nor read acces\n");
+	}
+	else
+		pipex->infile = 0;
+}
+
 void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
 {
 	pipex->cmd1_args = ft_split(argv[2], ' ');
@@ -82,4 +93,5 @@ void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
 		ft_printf("Error\nfirst cmd not found\n");
 	if (!pipex->cmd2_path)
 		ft_printf("Error\nseccond cmd not found\n");
+	ft_acces_folder(argv, pipex);
 }
