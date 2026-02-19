@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:17:10 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/19 15:48:19 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:01:49 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_env_path(char **envp)
 	return (NULL);
 }
 
-char	*find_cmd_path(char *cmd, char **envp)
+static char	*search_in_path(char *cmd, char **envp)
 {
 	char	**all_paths;
 	char	*path_part;
@@ -34,8 +34,10 @@ char	*find_cmd_path(char *cmd, char **envp)
 	int		i;
 
 	all_paths = ft_split(get_env_path(envp), ':');
-	i = 0;
-	while (all_paths[i])
+	if (!all_paths)
+		return (NULL);
+	i = -1;
+	while (all_paths[++i])
 	{
 		path_part = ft_strjoin(all_paths[i], "/");
 		full_path = ft_strjoin(path_part, cmd);
@@ -46,10 +48,22 @@ char	*find_cmd_path(char *cmd, char **envp)
 			return (full_path);
 		}
 		free(full_path);
-		i++;
 	}
 	free_tab(all_paths);
 	return (NULL);
+}
+
+char	*find_cmd_path(char *cmd, char **envp)
+{
+	if (!cmd || !*cmd)
+		return (NULL);
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	return (search_in_path(cmd, envp));
 }
 
 void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
