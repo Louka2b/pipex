@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:17:10 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/19 16:01:49 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/23 12:55:46 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,24 @@ char	*find_cmd_path(char *cmd, char **envp)
 	return (search_in_path(cmd, envp));
 }
 
+static void	ft_acces_folder(char **argv, t_pipex *pipex)
+{
+	if (access(argv[1], R_OK) == -1)
+	{
+		pipex->infile = ft_strdup("");
+		perror(argv[1]);
+	}
+	else
+		pipex->infile = ft_strdup("");
+	pipex->outfilefd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex->outfilefd == -1)
+	{
+		perror(argv[4]);
+		free_all(pipex);
+		exit(1);
+	}
+}
+
 void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
 {
 	pipex->cmd1_args = ft_split(argv[2], ' ');
@@ -82,4 +100,5 @@ void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
 		ft_printf("Error\nfirst cmd not found\n");
 	if (!pipex->cmd2_path)
 		ft_printf("Error\nseccond cmd not found\n");
+	ft_acces_folder(argv, pipex);
 }
