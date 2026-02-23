@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:17:10 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/19 16:22:22 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/23 12:55:46 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,18 @@ static void	ft_acces_folder(char **argv, t_pipex *pipex)
 {
 	if (access(argv[1], R_OK) == -1)
 	{
-		pipex->infile = -1;
-		ft_printf("TMP MSG Error\nfile1 nor read acces\n");
+		pipex->infile = ft_strdup("");
+		perror(argv[1]);
 	}
 	else
-		pipex->infile = 0;
+		pipex->infile = ft_strdup("");
+	pipex->outfilefd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex->outfilefd == -1)
+	{
+		perror(argv[4]);
+		free_all(pipex);
+		exit(1);
+	}
 }
 
 void	ft_parsing(t_pipex *pipex, char **argv, char **envp)
