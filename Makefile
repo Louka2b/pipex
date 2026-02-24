@@ -2,7 +2,7 @@ NAME        = pipex
 LIBFT       = libft/libft.a
 LIBFT_DIR   = libft
 MAIN        = src/main.c
-SRCS        = utils/pipex_u.c src/ft_check_file.c
+SRCS        = src/parsing.c
 OBJS        = $(SRCS:.c=.o)
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -g
