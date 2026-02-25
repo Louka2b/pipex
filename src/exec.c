@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 11:38:54 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/25 11:38:55 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:48:34 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void execute_cmd_absolute(char *argv, char **envp)
 	exit(127);
 }
 
-static void execute_cmd_relative(char *argv, char **envp)
+static void	execute_cmd_relative(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;

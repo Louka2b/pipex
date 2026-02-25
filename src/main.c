@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 11:41:44 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/25 11:41:45 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:47:34 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,10 @@ int	main(int argc, char **argv, char **envp)
 	int		fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
+	int		status[2];
 	pid_t	wpid;
-	int		status;
-	int		last_status;
 
-	last_status = 0;
+	status[1] = 0;
 	if (argc != 5)
 		return (write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 37), 1);
 	if (pipe(fd) == -1)
@@ -78,11 +77,14 @@ int	main(int argc, char **argv, char **envp)
 	close(fd[1]);
 	while (1)
 	{
-		wpid = wait(&status);
+		wpid = wait(&status[0]);
 		if (wpid <= 0)
 			break ;
 		if (wpid == pid2)
-			last_status = status;
+		{
+			if (WIFEXITED(status[0]))
+				status[1] = WEXITSTATUS(status[0]);
+		}
 	}
-	return ((last_status >> 8) & 0xFF);
+	return (status[1]);
 }
