@@ -1,26 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 15:20:25 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/24 18:30:38 by ldeplace         ###   ########.fr       */
+/*   Created: 2026/02/25 11:39:00 by ldeplace          #+#    #+#             */
+/*   Updated: 2026/02/25 11:39:17 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-
-static void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
-}
 
 char	*get_path(char *cmd, char **envp)
 {
@@ -36,43 +26,44 @@ char	*get_path(char *cmd, char **envp)
 		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
 	i = -1;
-	while (paths[++i])
+	while (paths && paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (access(full_path, X_OK) == 0)
+		{
+			free_tab(paths);
 			return (full_path);
+		}
 		free(full_path);
 	}
 	free_tab(paths);
 	return (NULL);
 }
 
-void	execute_cmd(char *argv, char **envp)
+void	ft_check_space(char *cmd)
 {
-	char	**cmd;
-	char	*path;
+	int	i;
 
-	cmd = ft_split(argv, ' ');
-	if (!cmd || !cmd[0])
+	i = 0;
+	while (cmd[i] == ' ')
+		i++;
+	if (cmd[i] == '\0')
 	{
-		if (cmd)
-			free(cmd);
-		exit(1);
-	}
-	path = get_path(cmd[0], envp);
-	if (!path)
-	{
-		free_tab(cmd);
-		perror("pipex: command not found");
+		write(2, "pipex: command not found\n", 25);
 		exit(127);
 	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		perror("pipex: execve");
-		free(path);
-		free_tab(cmd);
-		exit(1);
-	}
+}
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
 }
