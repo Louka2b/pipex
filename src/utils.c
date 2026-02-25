@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 15:20:25 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/24 15:23:01 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/24 18:30:38 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,11 @@ void	execute_cmd(char *argv, char **envp)
 
 	cmd = ft_split(argv, ' ');
 	if (!cmd || !cmd[0])
-		exit(EXIT_FAILURE);
+	{
+		if (cmd)
+			free(cmd);
+		exit(1);
+	}
 	path = get_path(cmd[0], envp);
 	if (!path)
 	{
@@ -67,7 +71,8 @@ void	execute_cmd(char *argv, char **envp)
 	if (execve(path, cmd, envp) == -1)
 	{
 		perror("pipex: execve");
+		free(path);
 		free_tab(cmd);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }

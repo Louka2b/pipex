@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 15:16:44 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/24 15:26:22 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/25 09:42:49 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	child_process(char **argv, char **envp, int *fd)
 	if (infile == -1)
 	{
 		perror("pipex: input");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
-	dup2(fd[1], STDOUT_FILENO);
-	dup2(infile, STDIN_FILENO);
+	dup2(fd[1], 1);
+	dup2(infile, 0);
 	close(fd[0]);
 	close(fd[1]);
 	close(infile);
@@ -38,10 +38,10 @@ void	parent_process(char **argv, char **envp, int *fd)
 	if (outfile == -1)
 	{
 		perror("pipex: output");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
-	dup2(fd[0], STDIN_FILENO);
-	dup2(outfile, STDOUT_FILENO);
+	dup2(fd[0], 0);
+	dup2(outfile, 1);
 	close(fd[1]);
 	close(fd[0]);
 	close(outfile);
