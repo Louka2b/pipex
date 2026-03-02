@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 11:41:44 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/25 11:47:34 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/25 14:06:41 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,30 @@ void	parent_process(char **argv, char **envp, int *fd)
 	exit(127);
 }
 
+static	int	ft_wait_pid(int *status, pid_t pid2)
+{
+	pid_t	wpid;
+
+	while (1)
+	{
+		wpid = wait(&status[0]);
+		if (wpid <= 0)
+			break ;
+		if (wpid == pid2)
+		{
+			if (WIFEXITED(status[0]))
+				status[1] = WEXITSTATUS(status[0]);
+		}
+	}
+	return (status[1]);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
 	int		status[2];
-	pid_t	wpid;
 
 	status[1] = 0;
 	if (argc != 5)
@@ -75,16 +92,5 @@ int	main(int argc, char **argv, char **envp)
 		parent_process(argv, envp, fd);
 	close(fd[0]);
 	close(fd[1]);
-	while (1)
-	{
-		wpid = wait(&status[0]);
-		if (wpid <= 0)
-			break ;
-		if (wpid == pid2)
-		{
-			if (WIFEXITED(status[0]))
-				status[1] = WEXITSTATUS(status[0]);
-		}
-	}
-	return (status[1]);
+	return (ft_wait_pid(status, pid2));
 }
