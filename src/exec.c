@@ -29,8 +29,10 @@ static	void	execute_cmd_absolute(char *argv, char **envp)
 	perror("pipex: execve");
 	free_tab(cmd);
 	if (access(path, X_OK) == 0)
+	{	
 		free(path);
-	exit(126);
+		exit(126);
+	}
 	free(path);
 	exit(127);
 }
