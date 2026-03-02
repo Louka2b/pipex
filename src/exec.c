@@ -63,10 +63,10 @@ static void	execute_cmd_relative(char *argv, char **envp)
 	if (!path)
 		path_error(cmd);
 	execve(path, cmd, envp);
-	if (access(path, X_OK) == 0)
-		exit(126);
 	free(path);
 	free_tab(cmd);
+	if (access(path, X_OK) == 0)
+		exit(126);
 	exit(127);
 }
 
