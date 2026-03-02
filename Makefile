@@ -1,31 +1,32 @@
-NAME        = pipex
-LIBFT       = libft/libft.a
-LIBFT_DIR   = libft
-MAIN        = src/main.c
-SRCS        = src/utils.c src/exec.c
-OBJS        = $(SRCS:.c=.o)
-CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g
-RM          = rm -f
+NAME = pipex
+LIBFT = libft
+LIBFT_A = libft/libft.a
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g
+RM = rm -f
+
+SRCS = src/main.c src/exec.c src/utils.c
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+$(NAME): $(LIBFT_A) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS) $(MAIN)
-	$(CC) $(CFLAGS) $(MAIN) $(OBJS) $(LIBFT) -o $(NAME)
+$(LIBFT_A):
+	$(MAKE) -C $(LIBFT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(LIBFT) clean
 
 fclean: clean
 	$(RM) $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(LIBFT) fclean
 
 re: fclean all
 

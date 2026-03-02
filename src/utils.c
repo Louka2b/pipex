@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 11:39:00 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/25 11:39:17 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/02/25 18:00:01 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_path(char *cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
 		return (NULL);
@@ -33,8 +33,7 @@ char	*get_path(char *cmd, char **envp)
 		free(tmp);
 		if (access(full_path, X_OK) == 0)
 		{
-			free_tab(paths);
-			return (full_path);
+			return (free_tab(paths), full_path);
 		}
 		free(full_path);
 	}
