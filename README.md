@@ -1,6 +1,6 @@
 *This project has been created as part of the 42 curriculum by ldeplace.*
 
-#PIPEX
+# PIPEX
 
 ## Description:
 pipex is a C project that focuses on handling UNIX pipes. This project will allow you to explore a UNIX mechanism in detail, one that you are already familiar with, by implementing it in your program. The goal is to replicate exactly the behavior of the following shell command: < file1 cmd1 | cmd2 > file2.
