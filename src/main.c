@@ -6,7 +6,7 @@
 /*   By: ldeplace <ldeplace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 11:41:44 by ldeplace          #+#    #+#             */
-/*   Updated: 2026/02/25 14:06:41 by ldeplace         ###   ########.fr       */
+/*   Updated: 2026/03/03 16:23:16 by ldeplace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	parent_process(char **argv, char **envp, int *fd)
 
 static	int	ft_wait_pid(int *status, pid_t pid2)
 {
-	pid_t	wpid;
+	pid_t	wpid; 
 
 	while (1)
 	{
