@@ -12,7 +12,7 @@
 
 #include "../includes/pipex.h"
 
-static	void	execute_cmd_absolute(char *argv, char **envp)
+static	void	execute_cmd_relative(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
@@ -46,7 +46,7 @@ static void	path_error(char **cmd)
 	exit(127);
 }
 
-static void	execute_cmd_relative(char *argv, char **envp)
+static void	execute_cmd_absolute(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
@@ -63,10 +63,13 @@ static void	execute_cmd_relative(char *argv, char **envp)
 	if (!path)
 		path_error(cmd);
 	execve(path, cmd, envp);
-	free(path);
 	free_tab(cmd);
 	if (access(path, X_OK) == 0)
+	{
+		free(path);
 		exit(126);
+	}
+	free(path);
 	exit(127);
 }
 
@@ -75,5 +78,5 @@ void	execute_cmd(char *argv, char **envp)
 	if (argv[0] == '/')
 		execute_cmd_absolute(argv, envp);
 	else
-		execute_cmd_relative(argv, envp);
+	execute_cmd_relative(argv, envp);
 }
