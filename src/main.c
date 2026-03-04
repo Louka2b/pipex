@@ -56,7 +56,7 @@ void	parent_process(char **argv, char **envp, int *fd)
 
 static	int	ft_wait_pid(int *status, pid_t pid2)
 {
-	pid_t	wpid; 
+	pid_t	wpid;
 
 	while (1)
 	{
