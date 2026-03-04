@@ -20,6 +20,7 @@
 char	*get_path(char *cmd, char **envp);
 void	execute_cmd(char *argv, char **envp);
 void	free_tab(char **tab);
+void	exit_free(char *path);
 void	ft_check_space(char *cmd);
 
 #endif

@@ -66,3 +66,9 @@ void	free_tab(char **tab)
 		free(tab[i++]);
 	free(tab);
 }
+
+void	exit_free(char *path)
+{
+	free(path);
+	exit(126);
+}
