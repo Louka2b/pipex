@@ -24,8 +24,16 @@ void	child_process(char **argv, char **envp, int *fd)
 		close(fd[1]);
 		exit(1);
 	}
-	dup2(fd[1], 1);
-	dup2(infile, 0);
+	if (dup2(fd[1], 1) == -1)
+	{
+		perror("pipex: dup2");
+		exit(1);
+	}
+	if (dup2(infile, 0) == -1)
+	{
+		perror("pipex: dup2");
+		exit(1);
+	}
 	close(fd[0]);
 	close(fd[1]);
 	close(infile);
@@ -45,8 +53,16 @@ void	parent_process(char **argv, char **envp, int *fd)
 		close(fd[1]);
 		exit(1);
 	}
-	dup2(fd[0], 0);
-	dup2(outfile, 1);
+	if (dup2(fd[0], 0) == -1)
+	{
+		perror("pipex: dup2");
+		exit(1);
+	}
+	if (dup2(outfile, 1) == -1)
+	{
+		perror("pipex: dup2");
+		exit(1);
+	}
 	close(fd[0]);
 	close(fd[1]);
 	close(outfile);
@@ -67,6 +83,8 @@ static	int	ft_wait_pid(int *status, pid_t pid2)
 		{
 			if (WIFEXITED(status[0]))
 				status[1] = WEXITSTATUS(status[0]);
+			else if (WIFSIGNALED(status[0]))
+				status[1] = 128 + WTERMSIG(status[0]);
 		}
 	}
 	return (status[1]);
@@ -85,9 +103,13 @@ int	main(int argc, char **argv, char **envp)
 	if (pipe(fd) == -1)
 		return (perror("pipex: pipe"), 1);
 	pid1 = fork();
+	if (pid1 == -1)
+		return (perror("pipex: fork"), 1);
 	if (pid1 == 0)
 		child_process(argv, envp, fd);
 	pid2 = fork();
+	if (pid2 == -1)
+		return (perror("pipex: fork"), 1);
 	if (pid2 == 0)
 		parent_process(argv, envp, fd);
 	close(fd[0]);

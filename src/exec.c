@@ -27,7 +27,7 @@ static void	relative_more(char **envp, char **cmd, char *path)
 	{
 		path = ft_strdup(cmd[0]);
 		execve(path, cmd, envp);
-		if (access(path, X_OK) == 0)
+		if (access(path, F_OK) == 0)
 		{
 			free_tab(cmd);
 			free(path);
@@ -41,6 +41,7 @@ static void	relative_more(char **envp, char **cmd, char *path)
 	if (!path)
 		path_error(cmd);
 	execve(path, cmd, envp);
+	perror("pipex: execve");
 	free_tab(cmd);
 	if (access(path, X_OK) == 0)
 	{
@@ -70,6 +71,7 @@ static	void	execute_cmd_relative(char *argv, char **envp)
 static void	execute_cmd_absolute(char *argv, char **envp)
 {
 	char	**cmd;
+	int		exit_code;
 
 	ft_check_space(argv);
 	cmd = ft_split(argv, ' ');
@@ -80,10 +82,11 @@ static void	execute_cmd_absolute(char *argv, char **envp)
 		exit(1);
 	}
 	execve(cmd[0], cmd, envp);
+	exit_code = 127;
+	if (access(cmd[0], F_OK) == 0)
+		exit_code = 126;
 	free_tab(cmd);
-	if (access(cmd[0], X_OK) == 0)
-		exit(126);
-	exit(127);
+	exit(exit_code);
 }
 
 void	execute_cmd(char *argv, char **envp)
