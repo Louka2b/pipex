@@ -20,6 +20,8 @@ char	*get_path(char *cmd, char **envp)
 	int		i;
 
 	i = 0;
+	if (!envp || !*envp)
+		return (NULL);
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
@@ -32,9 +34,7 @@ char	*get_path(char *cmd, char **envp)
 		full_path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (access(full_path, X_OK) == 0)
-		{
 			return (free_tab(paths), full_path);
-		}
 		free(full_path);
 	}
 	free_tab(paths);

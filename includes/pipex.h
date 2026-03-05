@@ -22,5 +22,6 @@ void	execute_cmd(char *argv, char **envp);
 void	free_tab(char **tab);
 void	exit_free(char *path);
 void	ft_check_space(char *cmd);
+void	check_output_file(char **argv, int *fd);
 
 #endif
